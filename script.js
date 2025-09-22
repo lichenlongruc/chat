@@ -8,6 +8,17 @@ const API_CONFIG = {
     apiKey: "7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ" // 请替换为您的实际API密钥
 };
 
+// 配置marked（Markdown解析器）
+marked.setOptions({
+    highlight: function(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+    },
+    langPrefix: 'hljs language-',
+    breaks: true,
+    gfm: true
+});
+
 // DOM元素
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
@@ -17,7 +28,7 @@ const sendButton = document.getElementById('send-button');
 let conversationHistory = [
     {
         role: "system",
-        content: "你是一个有用的AI助手，专门帮助用户学习和解答问题。请先思考再回答，思考过程放在<think>标签内，正式回答放在标签外。"
+        content: "你是一个有用的AI助手，专门帮助用户学习和解答问题。请先思考再回答，思考过程放在<think>标签内，正式回答放在标签外。请使用Markdown格式来格式化你的回答，例如使用**加粗**、###标题、`代码`等。"
     }
 ];
 
@@ -37,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
     userInput.addEventListener('input', function() {
         sendButton.disabled = !userInput.value.trim();
     });
+    
+    // 初始禁用发送按钮
+    sendButton.disabled = true;
 });
 
 // 发送消息函数
@@ -131,7 +145,14 @@ function addMessageToChat(sender, content) {
     
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
-    messageContent.textContent = content;
+    
+    // 用户消息直接显示文本
+    if (sender === 'user') {
+        messageContent.textContent = content;
+    } else {
+        // AI消息使用Markdown渲染
+        messageContent.innerHTML = marked.parse(content);
+    }
     
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(messageContent);
@@ -142,7 +163,7 @@ function addMessageToChat(sender, content) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-// 添加助手消息（处理思维链）
+// 添加助手消息（处理思维链和Markdown）
 function addAssistantMessage(content) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message assistant-message';
@@ -155,17 +176,17 @@ function addAssistantMessage(content) {
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
     
-    // 解析思维链和正式回答
-    const thinkMatch = content.match(/<think>(.*?)<\/think>(.*)/s);
+    // 改进的思维链提取逻辑 - 更严格地匹配<think>标签
+    const thinkMatch = extractThinkContent(content);
     
     if (thinkMatch) {
-        const thinkContent = thinkMatch[1].trim();
-        const formalAnswer = thinkMatch[2].trim();
+        const thinkContent = thinkMatch.thinkContent;
+        const formalAnswer = thinkMatch.formalAnswer;
         
-        // 添加正式回答
-        const answerSpan = document.createElement('div');
-        answerSpan.textContent = formalAnswer;
-        messageContent.appendChild(answerSpan);
+        // 添加正式回答（使用Markdown渲染）
+        const answerDiv = document.createElement('div');
+        answerDiv.innerHTML = marked.parse(formalAnswer);
+        messageContent.appendChild(answerDiv);
         
         // 添加思维链切换按钮
         const thinkToggle = document.createElement('button');
@@ -193,8 +214,8 @@ function addAssistantMessage(content) {
         messageContent.appendChild(thinkToggle);
         messageContent.appendChild(thinkDiv);
     } else {
-        // 如果没有思维链标签，直接显示内容
-        messageContent.textContent = content;
+        // 如果没有思维链标签，直接显示内容（使用Markdown渲染）
+        messageContent.innerHTML = marked.parse(content);
     }
     
     messageDiv.appendChild(avatar);
@@ -204,6 +225,38 @@ function addAssistantMessage(content) {
     
     // 滚动到底部
     chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // 高亮代码块
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+    });
+}
+
+// 改进的思维链提取函数
+function extractThinkContent(content) {
+    // 更严格的正则表达式匹配<think>标签
+    const thinkRegex = /<think>([\s\S]*?)<\/think>([\s\S]*)/;
+    const match = content.match(thinkRegex);
+    
+    if (match && match.length >= 3) {
+        return {
+            thinkContent: match[1].trim(),
+            formalAnswer: match[2].trim()
+        };
+    }
+    
+    // 如果没有匹配到标准的<think>标签，尝试其他可能的格式
+    const thinkStart = content.indexOf('<think>');
+    const thinkEnd = content.indexOf('</think>');
+    
+    if (thinkStart !== -1 && thinkEnd !== -1 && thinkEnd > thinkStart) {
+        return {
+            thinkContent: content.substring(thinkStart + 7, thinkEnd).trim(),
+            formalAnswer: content.substring(thinkEnd + 8).trim()
+        };
+    }
+    
+    return null;
 }
 
 // 显示"正在输入"指示器
