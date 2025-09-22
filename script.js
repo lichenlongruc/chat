@@ -77,6 +77,9 @@ function displayMessage(role, message) {
     messageElement.scrollIntoView({ behavior: 'smooth' });
 }
 
+
+
+
 function sendMessage() {
     const inputElement = document.getElementById('chat-input');
     const message = inputElement.value;
@@ -91,11 +94,11 @@ function sendMessage() {
         loadingElement.style.display = 'block';
     }
 
-    const apiKey = '7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ';
+    const apiKey = '7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ'; // 智谱AI密钥
     const endpoint = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
     const payload = {
-        model: "glm-z1-flash",
+        model: "glm-z1-flash", // 使用智谱AI的模型
         messages: [
             { role: "system", content: "You are a helpful assistant" },
             { role: "user", content: message }
@@ -111,15 +114,23 @@ function sendMessage() {
         },
         body: JSON.stringify(payload)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         // 隐藏加载动画
         if (loadingElement) {
             loadingElement.style.display = 'none';
         }
 
+        // 智谱AI的响应格式可能不同
         if (data.choices && data.choices.length > 0) {
             displayMessage('bot', data.choices[0].message.content);
+        } else if (data.error) {
+            displayMessage('bot', `错误: ${data.error.message}`);
         } else {
             displayMessage('bot', '出错了，请稍后再试。');
         }
@@ -130,10 +141,12 @@ function sendMessage() {
             loadingElement.style.display = 'none';
         }
 
-        displayMessage('bot', '出错了，请稍后再试。');
+        displayMessage('bot', `出错了: ${error.message}`);
         console.error('Error:', error);
     });
 }
+
+
 
 // 添加主题切换功能
 function toggleTheme() {
