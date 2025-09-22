@@ -92,10 +92,10 @@ function sendMessage() {
     }
 
     const apiKey = '7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ';
-    const endpoint = 'https://api.deepseek.com/chat/completions';
+    const endpoint = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
     const payload = {
-        model: "deepseek-chat",
+        model: "glm-z1-flash",
         messages: [
             { role: "system", content: "You are a helpful assistant" },
             { role: "user", content: message }
