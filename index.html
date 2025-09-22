@@ -9,266 +9,228 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            color: #7f8c8d;
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        main {
-            flex: 1;
-            max-width: 1200px;
+        
+        .container {
             width: 100%;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .chat-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            height: 70vh;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
+            height: 90vh;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-
-        .chat-messages {
+        
+        header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .chat-container {
             flex: 1;
             overflow-y: auto;
-            padding: 2rem;
-            scroll-behavior: smooth;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-
+        
         .message {
             display: flex;
-            margin-bottom: 1.5rem;
-            animation: fadeIn 0.3s ease-in;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease-in-out;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
+        
+        .user-message {
             flex-direction: row-reverse;
         }
-
+        
         .avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            margin: 0 1rem;
+            object-fit: cover;
             flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
+        
         .message-content {
             max-width: 70%;
-            padding: 1rem 1.5rem;
+            padding: 12px 16px;
             border-radius: 18px;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.4;
         }
-
-        .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        .user-message .message-content {
+            background: #4b6cb7;
             color: white;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 4px;
         }
-
-        .message.assistant .message-content {
-            background: #f1f3f5;
-            color: #2c3e50;
-            border-bottom-left-radius: 5px;
+        
+        .assistant-message .message-content {
+            background: #f0f2f5;
+            color: #333;
+            border-bottom-left-radius: 4px;
         }
-
-        .thinking-chain {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #fff3cd;
-            border-radius: 10px;
-            border-left: 4px solid #ffc107;
+        
+        .think-toggle {
+            background: #e9ecef;
+            border: none;
+            border-radius: 12px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: #6c757d;
+            cursor: pointer;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        
+        .think-toggle:hover {
+            background: #dee2e6;
+        }
+        
+        .think-content {
+            background: #f8f9fa;
+            border-left: 3px solid #4b6cb7;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
             font-size: 0.9rem;
-            color: #856404;
+            color: #495057;
             display: none;
-            max-height: 300px;
-            overflow-y: auto;
         }
-
-        .thinking-chain.show {
+        
+        .think-content.show {
             display: block;
             animation: slideDown 0.3s ease-out;
         }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                max-height: 0;
-            }
-            to {
-                opacity: 1;
-                max-height: 300px;
-            }
-        }
-
-        .toggle-thinking {
-            margin-top: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: #ffc107;
-            color: #856404;
-            border: none;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .toggle-thinking:hover {
-            background: #ffb300;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(255, 193, 7, 0.3);
-        }
-
-        .input-container {
-            padding: 1.5rem;
+        
+        .input-area {
+            display: flex;
+            padding: 15px;
             background: #f8f9fa;
             border-top: 1px solid #e9ecef;
+            gap: 10px;
         }
-
-        .input-wrapper {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-
-        .input-box {
+        
+        #user-input {
             flex: 1;
-            position: relative;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e9ecef;
-            border-radius: 15px;
-            resize: none;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            min-height: 60px;
-            max-height: 120px;
-        }
-
-        textarea:focus {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            font-size: 1rem;
+            transition: border 0.3s;
         }
-
-        .send-button {
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        #user-input:focus {
+            border-color: #4b6cb7;
+        }
+        
+        #send-button {
+            background: #4b6cb7;
             color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            transition: background 0.3s;
         }
-
-        .send-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        
+        #send-button:hover {
+            background: #3a5a9c;
         }
-
-        .send-button:active {
-            transform: translateY(0);
-        }
-
-        .send-button:disabled {
-            opacity: 0.6;
+        
+        #send-button:disabled {
+            background: #a0aec0;
             cursor: not-allowed;
-            transform: none;
         }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .typing-indicator.show {
+            opacity: 1;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #4b6cb7;
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            animation: typing 1.4s infinite ease-in-out;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #95a5a6;
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 200px; }
         }
-
-        .empty-state svg {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
         }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
+        
+        @media (max-width: 600px) {
+            .container {
+                height: 95vh;
+                border-radius: 10px;
+            }
+            
             h1 {
                 font-size: 2rem;
             }
@@ -276,208 +238,38 @@
             .message-content {
                 max-width: 85%;
             }
-            
-            .chat-container {
-                height: 80vh;
-            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>虚拟学习空间</h1>
-            <p class="subtitle">与AI助手一起探索知识的海洋</p>
-        </div>
-    </header>
-
-    <main>
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <p>开始你的学习之旅吧！</p>
-                </div>
-            </div>
-            
-            <div class="input-container">
-                <div class="input-wrapper">
-                    <div class="input-box">
-                        <textarea 
-                            id="userInput" 
-                            placeholder="输入你的问题..."
-                            rows="1"
-                            onkeydown="handleKeyDown(event)"
-                        ></textarea>
-                    </div>
-                    <button class="send-button" id="sendButton" onclick="sendMessage()">
-                        <span id="buttonText">发送</span>
-                        <span id="loadingSpinner" class="loading" style="display: none;"></span>
-                    </button>
+    <div class="container">
+        <header>
+            <h1>中国人民大学管理信息系统虚拟学习空间</h1>
+            <div class="subtitle">与AI4MIS一起畅游管理信息系统知识的海洋</div>
+        </header>
+        
+        <div class="chat-container" id="chat-container">
+            <!-- 初始欢迎消息 -->
+            <div class="message assistant-message">
+                <img src="assistant.png" alt="AI助手" class="avatar">
+                <div class="message-content">
+                    您好！我是AI4MIS学习助手，很高兴为您服务。请问有什么可以帮助您的？
                 </div>
             </div>
         </div>
-    </main>
+        
+        <!-- 输入区域 -->
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="输入您的问题..." autocomplete="off">
+            <button id="send-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 
-    <script>
-        // API配置 - 请替换为你的实际API密钥和端点
-        const API_KEY = '7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ'; // 替换为你的API密钥
-        const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'; // 智谱清言API端点
-
-        // 自动调整文本框高度
-        const textarea = document.getElementById('userInput');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-
-        // 处理回车键发送
-        function handleKeyDown(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // 发送消息
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-
-            // 清空输入框
-            input.value = '';
-            input.style.height = 'auto';
-
-            // 添加用户消息到聊天界面
-            addMessage('user', message);
-
-            // 禁用发送按钮并显示加载状态
-            const sendButton = document.getElementById('sendButton');
-            const buttonText = document.getElementById('buttonText');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            sendButton.disabled = true;
-            buttonText.style.display = 'none';
-            loadingSpinner.style.display = 'inline-block';
-
-            try {
-                // 调用API
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: 'glm-z1-flash',
-                        messages: [
-                            {
-                                role: 'user',
-                                content: message
-                            }
-                        ],
-                        stream: false,
-                        // 启用思维链
-                        thinking_mode: true
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API请求失败: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                // 提取回复和思维链
-                const reply = data.choices[0].message.content;
-                const thinkingChain = data.choices[0].message.thinking_content || '';
-
-                // 添加助手回复到聊天界面
-                addMessage('assistant', reply, thinkingChain);
-
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage('assistant', '抱歉，发生了错误。请稍后再试。', '');
-            } finally {
-                // 恢复发送按钮状态
-                sendButton.disabled = false;
-                buttonText.style.display = 'inline';
-                loadingSpinner.style.display = 'none';
-            }
-        }
-
-        // 添加消息到聊天界面
-        function addMessage(role, content, thinkingChain = '') {
-            const chatMessages = document.getElementById('chatMessages');
-            
-            // 移除空状态
-            const emptyState = chatMessages.querySelector('.empty-state');
-            if (emptyState) {
-                emptyState.remove();
-            }
-
-            // 创建消息元素
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            
-            const avatar = document.createElement('img');
-            avatar.className = 'avatar';
-            avatar.src = role === 'user' ? 'user.png' : 'assistant.png';
-            avatar.alt = role === 'user' ? '用户头像' : '助手头像';
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.textContent = content;
-            
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(contentDiv);
-            
-            // 如果有思维链，添加思维链展示
-            if (thinkingChain && role === 'assistant') {
-                const toggleButton = document.createElement('button');
-                toggleButton.className = 'toggle-thinking';
-                toggleButton.textContent = '查看思维过程';
-                toggleButton.onclick = function() {
-                    toggleThinking(this, thinkingChain);
-                };
-                
-                contentDiv.appendChild(toggleButton);
-            }
-            
-            chatMessages.appendChild(messageDiv);
-            
-            // 滚动到底部
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // 切换思维链显示
-        function toggleThinking(button, thinkingChain) {
-            const messageContent = button.parentElement;
-            let thinkingDiv = messageContent.querySelector('.thinking-chain');
-            
-            if (!thinkingDiv) {
-                thinkingDiv = document.createElement('div');
-                thinkingDiv.className = 'thinking-chain';
-                thinkingDiv.innerHTML = `<strong>思维过程：</strong><br>${thinkingChain.replace(/\n/g, '<br>')}`;
-                messageContent.appendChild(thinkingDiv);
-                
-                // 使用requestAnimationFrame确保动画正常工作
-                requestAnimationFrame(() => {
-                    thinkingDiv.classList.add('show');
-                });
-                
-                button.textContent = '隐藏思维过程';
-            } else {
-                thinkingDiv.classList.remove('show');
-                setTimeout(() => {
-                    thinkingDiv.remove();
-                }, 300);
-                button.textContent = '查看思维过程';
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
