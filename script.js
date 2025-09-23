@@ -5,7 +5,7 @@ const API_CONFIG = {
     temperature: 0.6,
     // 注意：在实际部署中，API密钥不应该直接暴露在前端代码中
     // 这里应该通过后端服务来代理API调用
-    apiKey: "7b5c7afb6f54726077a539c7d2a0b764.JOFYYlJJoYmJc6pJ" // 请替换为您的实际API密钥
+    apiKey: "API_KEY" // 请替换为您的实际API密钥
 };
 
 // 配置marked（Markdown解析器）
